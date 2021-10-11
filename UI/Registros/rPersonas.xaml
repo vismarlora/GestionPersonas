@@ -1,0 +1,63 @@
+﻿<Window x:Class="GestionPersonas.UI.Registros.rPersonas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GestionPersonas.UI.Registros"
+        mc:Ignorable="d"
+        Title="Registro de Personas" Height="350" Width="400">
+    <Grid>
+        <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+
+            <StackPanel Orientation="Vertical">
+                <Label Content="Persona Id:" />
+
+                <StackPanel Orientation="Horizontal" >
+                    <TextBox x:Name="PersonaIdTextBox" Text="{Binding PersonaId}"  Width="100"  Height="18" />
+                    <Button x:Name="BuscarButton" Margin="5,0" Click="BuscarButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/icons8-google-web-search-24.png" />
+                            <Label Content="Buscar" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <Label Content="Nombre"/>
+                <TextBox x:Name="NombreTextBox" Text="{Binding Nombres}"   />
+
+                <Label Content="Telefono" />
+                <TextBox x:Name="TelefonoTextBox" Text="{Binding Telefono}" />
+                <!--, Mode=TwoWay, ValidatesOnExceptions=True-->
+
+                <Label Content="Cedula"/>
+                <TextBox x:Name="CedulaTextBox" Text="{Binding Cedula}"/>
+
+                <Label Content="Roles"/>
+                <ComboBox x:Name="RolesComboBox" SelectedValue="{Binding RolId}" />
+            </StackPanel>
+
+            <!--BARRA DE BOTONES-->
+            <StackPanel Orientation="Horizontal" Margin="0,15" >
+                <Button x:Name="NuevoButton" Margin="5,0" Click="NuevoButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/icons8-nuevo-48.png" Width="30" />
+                        <Label Content="Nuevo" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="GuardarButton"   Margin="5,0" Click="GuardarButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/icons8-guardar-48.png" Width="30"/>
+                        <Label Content="Guardar" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="EliminarButton"  Margin="5,0" Click="EliminarButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/icons8-eliminar-16.png" />
+                        <Label Content="Eliminar" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+</Window>

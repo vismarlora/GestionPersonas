@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GestionPersonas.UI.Registros;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,24 @@ namespace GestionPersonas
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void PersonaMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            rPersonas registro = new rPersonas();
+            registro.Show();
+        }
+
+        private void RolMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            rRoles rol = new rRoles();
+            rol.Show();
+        }
+
+        private void GrupoMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            rGrupos grupo = new rGrupos();
+            grupo.Show();
         }
     }
 }

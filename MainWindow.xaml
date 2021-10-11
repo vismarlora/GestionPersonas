@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestionPersonas"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Ventana Principal" Height="300" Width="400">
     <Grid>
-
+        <StackPanel>
+            <Menu Height="20">
+                <MenuItem Header="Registro">
+                    <MenuItem x:Name="PersonaMenuItem" Header="Registro de Personas" Click="PersonaMenuItem_Click"/>
+                    <MenuItem x:Name="RolMenuItem" Header="Registro de Roles" Click="RolMenuItem_Click"/>
+                    <MenuItem x:Name="GrupoMenuItem" Header="Registro de Grupos" Click="GrupoMenuItem_Click"/>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
     </Grid>
 </Window>
