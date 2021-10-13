@@ -58,7 +58,7 @@
 
   <ItemGroup>
     <None Update="DATA\PeopleGestor.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

@@ -59,7 +59,12 @@ namespace GestionPersonas.UI.Registros
 
         private void AgregarFilaButton_Click(object sender, RoutedEventArgs e)
         {
-            grupo.Detalle.Add(new GruposDetalle(grupo.GrupoId, PersonaComboBox.SelectedIndex, OrdenTextBox.Text));
+            grupo.Detalle.Add(new GruposDetalle
+            {
+                GrupoId = grupo.GrupoId,
+                PersonaId = (int)PersonaComboBox.SelectedValue,
+                Orden = OrdenTextBox.Text
+            });
 
             Cargar();
 
@@ -75,6 +80,7 @@ namespace GestionPersonas.UI.Registros
                 Cargar();
             }
         }
+
         private bool ExisteEnLaBaseDeDatos()
         {
             Grupos esValido = GruposBLL.Buscar(grupo.GrupoId);
