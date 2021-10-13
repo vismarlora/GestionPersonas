@@ -16,6 +16,7 @@ namespace GestionPersonas.Entidades
         public DateTime Fecha { get; set; } = DateTime.Now;
         public string Descripcion { get; set; }
         public int CantidadPersonas { get; set; }
+        
         [ForeignKey("GrupoId")]
         public List<GruposDetalle> Detalle { get; set; } = new List<GruposDetalle>();
     }
