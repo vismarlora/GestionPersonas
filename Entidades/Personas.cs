@@ -16,6 +16,7 @@ namespace GestionPersonas.Entidades
         public string Telefono { get; set; }
         public string Cedula { get; set; }
         public int CantidadGrupos { get; set; }
+        public float TotalAportado { get; set; }
 
         [ForeignKey("RolId")]
         public virtual Roles Rol { get; set; }
