@@ -34,6 +34,9 @@
 
                 <Label Content="Roles"/>
                 <ComboBox x:Name="RolesComboBox" SelectedValue="{Binding RolId}" />
+                
+                <Label Content="Grupos"/>
+                <TextBox x:Name="CantidadGruposTextBox" IsReadOnly="True"  Text="{Binding CantidadGrupos}"/>
             </StackPanel>
 
             <!--BARRA DE BOTONES-->

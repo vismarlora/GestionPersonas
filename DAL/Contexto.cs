@@ -13,6 +13,7 @@ namespace GestionPersonas.DAL
         public DbSet<Personas> Personas { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Grupos> Grupos { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite(@"Data Source = DATA\PeopleGestor.db");

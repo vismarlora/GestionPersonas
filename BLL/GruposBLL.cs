@@ -28,6 +28,12 @@ namespace GestionPersonas.BLL
             {
                 //Agregar la entidad que se desea insertar al contexto
                 contexto.Grupos.Add(grupo);
+
+                foreach (var detalle in grupo.Detalle)
+                {
+                    detalle.Persona.CantidadGrupos += 1;
+                }
+
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -47,11 +53,24 @@ namespace GestionPersonas.BLL
 
             try
             {
+                var grupoAnterior = contexto.Grupos
+                    .Where(x => x.GrupoId == grupo.GrupoId)
+                    .Include(x => x.Detalle)
+                    .ThenInclude(x => x.Persona)
+                    .AsNoTracking()
+                    .SingleOrDefault();
+
                 //busca la entidad en la base de datos y la elimina
+                foreach (var detalle in grupoAnterior.Detalle)
+                {
+                    detalle.Persona.CantidadGrupos -= 1;
+                }
+
                 contexto.Database.ExecuteSqlRaw($"Delete FROM GruposDetalle Where GrupoId={grupo.GrupoId}");
 
                 foreach (var item in grupo.Detalle)
                 {
+                    item.Persona.CantidadGrupos += 1;
                     contexto.Entry(item).State = EntityState.Added;
                 }
 
@@ -81,6 +100,12 @@ namespace GestionPersonas.BLL
 
                 if (grupo != null)
                 {
+                    //busca la entidad en la base de datos y la elimina
+                    foreach (var detalle in grupo.Detalle)
+                    {
+                        detalle.Persona.CantidadGrupos -= 1;
+                    }
+
                     contexto.Grupos.Remove(grupo); //remover la entidad
                     paso = contexto.SaveChanges() > 0;
                 }
@@ -105,6 +130,8 @@ namespace GestionPersonas.BLL
             {
                 grupo = contexto.Grupos.Include(x => x.Detalle)
                     .Where(x => x.GrupoId == id)
+                     .Include(x => x.Detalle)
+                    .ThenInclude(x => x.Persona)
                     .SingleOrDefault();
             }
             catch (Exception)

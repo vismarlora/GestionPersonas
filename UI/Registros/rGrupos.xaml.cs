@@ -62,7 +62,7 @@ namespace GestionPersonas.UI.Registros
             grupo.Detalle.Add(new GruposDetalle
             {
                 GrupoId = grupo.GrupoId,
-                PersonaId = (int)PersonaComboBox.SelectedValue,
+                Persona  = (Personas)PersonaComboBox.SelectedItem,
                 Orden = OrdenTextBox.Text
             });
 

@@ -54,7 +54,8 @@
                             <DataGrid x:Name="DetalleDataGrid" ItemsSource="{Binding Detalle}" Height="80" AutoGenerateColumns="False" >
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Grupo Id" Binding="{Binding GrupoId}" Visibility="Hidden" />
-                                    <DataGridTextColumn Header="Persona" Binding="{Binding PersonaId}"/>
+                                    <DataGridTextColumn Header="Persona" Binding="{Binding Persona.PersonaId}"/>
+                                    <DataGridTextColumn Header="Nombres" Binding="{Binding Persona.Nombres}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Orden" Binding="{Binding Orden}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
