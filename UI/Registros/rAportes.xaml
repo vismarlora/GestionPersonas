@@ -1,19 +1,19 @@
-﻿<Window x:Class="GestionPersonas.UI.Registros.rGrupos"
+﻿<Window x:Class="GestionPersonas.UI.Registros.rAportes"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestionPersonas.UI.Registros"
         mc:Ignorable="d"
-        Title="Registro de Grupos" Height="563" Width="588">
-    <Grid Margin="0,0,0,-138">
+        Title="rAportes" Height="631" Width="414">
+    <Grid Margin="0,0,0,-175">
         <StackPanel Orientation="Vertical" Margin="10,0,10,0">
 
             <StackPanel Orientation="Vertical">
-                <Label Content="Grupo Id:"/>
+                <Label Content="Aporte Id:"/>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="GrupoIdTextBox" Text="{Binding GrupoId}" Width="100" Height="18"/>
+                    <TextBox x:Name="AporteIdTextBox" Text="{Binding AporteId}" Width="100" Height="18"/>
                     <Button x:Name="BuscarButton" Margin="5,0" Click="BuscarButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Resources/icons8-google-web-search-24.png" />
@@ -25,19 +25,20 @@
                 <Label Content="Fecha"/>
                 <DatePicker x:Name="FechaDatePicker" SelectedDate="{Binding Fecha}" />
 
-                <Label Content="Descripción del grupo"/>
-                <TextBox x:Name="DescripcionTextBox" Text="{Binding Descripcion}"/>
+                <Label Content="Persona"/>
+                <ComboBox x:Name="PersonaComboBox" SelectedValue="{Binding PersonaId}" />
 
-                <Label Content="Cantidad de Personas"/>
-                <TextBox x:Name="CantidadPTextBox" Text="{Binding CantidadPersonas}" IsReadOnly="True"/>
+                <Label Content="Concepto"/>
+                <TextBox x:Name="ConceptoTextBox" Text="{Binding Concepto}"/>
 
                 <StackPanel Orientation="Vertical">
-                    <GroupBox Header="Detalles de grupo">
+                    <GroupBox Header="Detalles de aporte">
                         <StackPanel Margin="10">
-                            <Label Content="Persona"/>
-                            <ComboBox x:Name="PersonaComboBox"/>
-                            <Label Content="Orden"/>
-                            <TextBox x:Name="OrdenTextBox"/>
+
+                            <Label Content="Tipo de Aporte"/>
+                            <ComboBox x:Name="TipoAporteComboBox"/>
+                            <Label Content="Valor a aportar"/>
+                            <TextBox x:Name="ValorTextBox"/>
                             <StackPanel Orientation="Horizontal">
                                 <Button x:Name="AgregarFilaButton" Margin="10" Click="AgregarFilaButton_Click" Width="123">
                                     <StackPanel Orientation="Horizontal">
@@ -51,20 +52,21 @@
                                 </Button>
                             </StackPanel>
 
-                            <DataGrid x:Name="DetalleDataGrid" ItemsSource="{Binding Detalle}" Height="80" AutoGenerateColumns="False" >
+                            <DataGrid x:Name="DetalleDataGrid" ItemsSource="{Binding AporteDetalle}" Height="80" AutoGenerateColumns="False" >
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Grupo Id" Binding="{Binding GrupoId}" Visibility="Hidden"/>
-                                    
-                                    <DataGridTextColumn Header="Persona" Binding="{Binding Persona.PersonaId}"/>
-                                    
-                                    <DataGridTextColumn Header="Nombres" Binding="{Binding Persona.Nombres}"/>
-                                    
-                                    <DataGridTextColumn Header="Orden" Binding="{Binding Orden}"/>
+                                    <DataGridTextColumn Header="Tipo de Aporte" Binding="{Binding TipoAporteId}" />
+                                    <DataGridTextColumn Header="Monto" Binding="{Binding Monto, StringFormat=N2}" />
                                 </DataGrid.Columns>
+
                             </DataGrid>
 
                         </StackPanel>
                     </GroupBox>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Monto"/>
+                        <TextBox x:Name="MontoTextBox" Width="300" Text="{Binding Monto, StringFormat=N2}"  IsReadOnly="True"/>
+                    </StackPanel>
+
                 </StackPanel>
 
             </StackPanel>
@@ -73,7 +75,7 @@
             <StackPanel Orientation="Horizontal" Margin="0,15" HorizontalAlignment="Center" >
                 <Button x:Name="NuevoButton" Margin="5,0" Click="NuevoButton_Click">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/icons8-nuevo-48.png" Width="30" />
+                        <Image Source="/Resources/icons8-nuevo-48.png" Height="30"/>
                         <Label Content="Nuevo" />
                     </StackPanel>
                 </Button>
@@ -86,7 +88,7 @@
                 <Button x:Name="EliminarButton"  Margin="5,0" Click="EliminarButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/icons8-eliminar-16.png" Width="30"/>
-                        <Label Content="Eliminar"/>
+                        <Label Content="Eliminar" />
                     </StackPanel>
                 </Button>
             </StackPanel>

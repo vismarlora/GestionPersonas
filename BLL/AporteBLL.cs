@@ -10,38 +10,42 @@ using System.Threading.Tasks;
 
 namespace GestionPersonas.BLL
 {
-    public class GruposBLL
+    public class AporteBLL
     {
-        public static bool Guardar(Grupos grupo)
+        public static bool Guardar(Aportes aporte)
         {
-            if (!Existe(grupo.GrupoId))
-                return Insertar(grupo);
+            if (!Existe(aporte.AporteId))
+                return Insertar(aporte);
             else
-                return Modificar(grupo);
+                return Modificar(aporte);
         }
-        private static bool Insertar(Grupos grupo)
+        private static bool Insertar(Aportes aporte)
         {
             bool paso = false;
-
             Contexto contexto = new Contexto();
+
 
             try
             {
 
-                contexto.Grupos.Add(grupo);
+                contexto.Aportes.Add(aporte);
 
-                foreach (var detalle in grupo.Detalle)
+                foreach (var detalle in aporte.AporteDetalle)
                 {
+                    contexto.Entry(detalle.TipoAporte).State = EntityState.Modified;
+
                     contexto.Entry(detalle.Persona).State = EntityState.Modified;
 
-                    detalle.Persona.CantidadGrupos += 1;
+                    detalle.TipoAporte.MetaMonto += aporte.Monto;
+
+                    detalle.Persona.TotalAportado += detalle.Monto;
                 }
 
                 paso = contexto.SaveChanges() > 0;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                Console.WriteLine(e.InnerException.Message);
             }
             finally
             {
@@ -49,41 +53,49 @@ namespace GestionPersonas.BLL
             }
             return paso;
         }
-        private static bool Modificar(Grupos grupo)
+        private static bool Modificar(Aportes aporte)
         {
             bool paso = false;
-
             Contexto contexto = new Contexto();
 
             try
             {
-                var grupoAnterior = contexto.Grupos
-                     .Where(x => x.GrupoId == grupo.GrupoId)
-                     .Include(x => x.Detalle)
-                     .ThenInclude(x => x.Persona)
-                     .AsNoTracking()
-                     .SingleOrDefault();
+                var aporteAnterior = contexto.Aportes
+                    .Where(x => x.AporteId == aporte.AporteId)
+                    .Include(x => x.AporteDetalle)
+                    .ThenInclude(x => x.Persona)
+                    .AsNoTracking()
+                    .SingleOrDefault();
 
-                
-                foreach (var detalle in grupoAnterior.Detalle)
+
+                foreach (var detalle in aporteAnterior.AporteDetalle)
                 {
+                    contexto.Entry(detalle.TipoAporte).State = EntityState.Modified;
+
                     contexto.Entry(detalle.Persona).State = EntityState.Modified;
 
-                    detalle.Persona.CantidadGrupos -= 1;
+                    detalle.Persona.TotalAportado -= aporte.Monto;
+
+                    detalle.TipoAporte.MetaMonto -= detalle.Monto;
                 }
 
-                contexto.Database.ExecuteSqlRaw($"Delete FROM GruposDetalle Where GrupoId={grupo.GrupoId}");
+                contexto.Database.ExecuteSqlRaw($"Delete FROM AporteDetalle Where Id={aporte.AporteId}");
 
-                foreach (var item in grupo.Detalle)
+                foreach (var item in aporte.AporteDetalle)
                 {
+                    contexto.Entry(item.TipoAporte).State = EntityState.Modified;
+
                     contexto.Entry(item.Persona).State = EntityState.Modified;
 
-                    item.Persona.CantidadGrupos += 1;
+                    item.Persona.TotalAportado += aporte.Monto;
+
+                    item.TipoAporte.MetaMonto += item.Monto;
 
                     contexto.Entry(item).State = EntityState.Added;
                 }
 
-                contexto.Entry(grupo).State = EntityState.Modified;
+
+                contexto.Entry(aporte).State = EntityState.Modified;
 
                 paso = contexto.SaveChanges() > 0;
             }
@@ -105,20 +117,24 @@ namespace GestionPersonas.BLL
 
             try
             {
-                
-                var grupo = GruposBLL.Buscar(id);
 
-                if (grupo != null)
+                var aporte = AporteBLL.Buscar(id);
+
+                if (aporte != null)
                 {
-                    
-                    foreach (var detalle in grupo.Detalle)
+
+                    foreach (var detalle in aporte.AporteDetalle)
                     {
+                        contexto.Entry(detalle.TipoAporte).State = EntityState.Modified;
+
                         contexto.Entry(detalle.Persona).State = EntityState.Modified;
 
-                        detalle.Persona.CantidadGrupos -= 1;
+                        detalle.Persona.TotalAportado -= aporte.Monto;
+
+                        detalle.TipoAporte.MetaMonto -= detalle.Monto;
                     }
 
-                    contexto.Grupos.Remove(grupo);
+                    contexto.Aportes.Remove(aporte);
 
                     paso = contexto.SaveChanges() > 0;
                 }
@@ -134,19 +150,19 @@ namespace GestionPersonas.BLL
             }
             return paso;
         }
-        public static Grupos Buscar(int id)
+        public static Aportes Buscar(int id)
         {
-            Grupos grupo = new Grupos();
+            Aportes aporte = new Aportes();
 
             Contexto contexto = new Contexto();
 
             try
             {
-                grupo = contexto.Grupos.Include(x => x.Detalle)
-                   .Where(x => x.GrupoId == id)
-                   .Include(x => x.Detalle)
-                   .ThenInclude(x => x.Persona)
-                   .SingleOrDefault();
+                aporte = contexto.Aportes.Include(x => x.AporteDetalle)
+                    .Where(x => x.AporteId == id)
+                    .Include(x => x.AporteDetalle)
+                    .ThenInclude(x => x.Persona)
+                    .SingleOrDefault();
             }
             catch (Exception)
             {
@@ -156,17 +172,18 @@ namespace GestionPersonas.BLL
             {
                 contexto.Dispose();
             }
-            return grupo;
+            return aporte;
         }
-        public static List<Grupos> GetList(Expression<Func<Grupos, bool>> criterio)
+        public static List<Aportes> GetList(Expression<Func<Aportes, bool>> criterio)
         {
-            List<Grupos> Lista = new List<Grupos>();
+            List<Aportes> Lista = new List<Aportes>();
 
             Contexto contexto = new Contexto();
 
             try
             {
-                Lista = contexto.Grupos.Where(criterio).ToList();
+
+                Lista = contexto.Aportes.Where(criterio).ToList();
             }
             catch (Exception)
             {
@@ -182,12 +199,11 @@ namespace GestionPersonas.BLL
         {
             Contexto contexto = new Contexto();
 
-
             bool encontrado = false;
 
             try
             {
-                encontrado = contexto.Grupos.Any(e => e.GrupoId == id);
+                encontrado = contexto.Aportes.Any(e => e.AporteId == id);
             }
             catch (Exception)
             {

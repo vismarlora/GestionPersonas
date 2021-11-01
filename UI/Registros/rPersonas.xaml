@@ -6,58 +6,63 @@
         xmlns:local="clr-namespace:GestionPersonas.UI.Registros"
         mc:Ignorable="d"
         Title="Registro de Personas" Height="350" Width="400">
-    <Grid>
+    <Grid Margin="0,0,0,-16">
         <StackPanel Orientation="Vertical" Margin="10,0,0,0">
 
             <StackPanel Orientation="Vertical">
-                <Label Content="Persona Id:" />
+                <Label Content="Persona Id:"/>
 
                 <StackPanel Orientation="Horizontal" >
                     <TextBox x:Name="PersonaIdTextBox" Text="{Binding PersonaId}"  Width="100"  Height="18" />
                     <Button x:Name="BuscarButton" Margin="5,0" Click="BuscarButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Resources/icons8-google-web-search-24.png" />
-                            <Label Content="Buscar" />
+                            <Label Content="Buscar"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
 
                 <Label Content="Nombre"/>
-                <TextBox x:Name="NombreTextBox" Text="{Binding Nombres}"   />
+                <TextBox x:Name="NombreTextBox" Text="{Binding Nombres}"/>
 
                 <Label Content="Telefono" />
-                <TextBox x:Name="TelefonoTextBox" Text="{Binding Telefono}" />
-                <!--, Mode=TwoWay, ValidatesOnExceptions=True-->
+                <TextBox x:Name="TelefonoTextBox" Text="{Binding Telefono}"/>
 
                 <Label Content="Cedula"/>
                 <TextBox x:Name="CedulaTextBox" Text="{Binding Cedula}"/>
 
                 <Label Content="Roles"/>
                 <ComboBox x:Name="RolesComboBox" SelectedValue="{Binding RolId}" />
+
+                <Label Content="Grupos"/>
+                <TextBox x:Name="CantidadGruposTextBox" IsReadOnly="True"  Text="{Binding CantidadGrupos}"/>
+
+                <Label Content="Total Aportado"/>
+                <TextBox x:Name="TotalAportadoTextBox" IsReadOnly="True" Text="{Binding TotalAportado}"/>
+                
             </StackPanel>
 
             <!--BARRA DE BOTONES-->
             <StackPanel Orientation="Horizontal" Margin="0,15" >
                 <Button x:Name="NuevoButton" Margin="5,0" Click="NuevoButton_Click">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/icons8-nuevo-48.png" Width="30" />
-                        <Label Content="Nuevo" />
+                        <Image Source="/Resources/icons8-nuevo-48.png" Width="30"/>
+                        <Label Content="Nuevo"/>
                     </StackPanel>
                 </Button>
                 <Button x:Name="GuardarButton"   Margin="5,0" Click="GuardarButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/icons8-guardar-48.png" Width="30"/>
-                        <Label Content="Guardar" />
+                        <Label Content="Guardar"/>
                     </StackPanel>
                 </Button>
                 <Button x:Name="EliminarButton"  Margin="5,0" Click="EliminarButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/icons8-eliminar-16.png" />
-                        <Label Content="Eliminar" />
+                        <Label Content="Eliminar"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
         </StackPanel>
-
     </Grid>
 </Window>

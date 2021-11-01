@@ -17,76 +17,88 @@ using System.Windows.Shapes;
 namespace GestionPersonas.UI.Registros
 {
     /// <summary>
-    /// Interaction logic for rGrupos.xaml
+    /// Interaction logic for rAportes.xaml
     /// </summary>
-    public partial class rGrupos : Window
+    public partial class rAportes : Window
     {
-        private Grupos grupo = new Grupos();
-        public rGrupos()
+        private Aportes aporte = new Aportes();
+        public rAportes()
         {
             InitializeComponent();
-            this.DataContext = grupo;
+            this.DataContext = aporte;
 
             PersonaComboBox.ItemsSource = PersonasBLL.GetPersonas();
             PersonaComboBox.SelectedValuePath = "PersonaId";
             PersonaComboBox.DisplayMemberPath = "Nombres";
+
+            TipoAporteComboBox.ItemsSource = TipoAporteBLL.GetTiposAportes();
+            TipoAporteComboBox.SelectedValuePath = "TipoAporteId";
+            TipoAporteComboBox.DisplayMemberPath = "Descripcion";
+
+            Limpiar();
+            ValorTextBox.Text = "0.00";
+            MontoTextBox.Text = "0.00";
         }
+
+
+
         private void Cargar()
         {
             this.DataContext = null;
-            this.DataContext = grupo;
+            this.DataContext = aporte;
         }
         private void Limpiar()
         {
-            this.grupo = new Grupos();
-            this.DataContext = grupo;
+            this.aporte = new Aportes();
+            this.DataContext = aporte;
+        }
+        private bool ExisteEnLaBaseDeDatos()
+        {
+            Aportes esValido = AporteBLL.Buscar(aporte.AporteId);
+
+            return (esValido != null);
         }
         private void BuscarButton_Click(object sender, RoutedEventArgs e)
         {
-            Grupos encontrado = GruposBLL.Buscar(grupo.GrupoId);
+            Aportes encontrado = AporteBLL.Buscar(aporte.AporteId);
 
             if (encontrado != null)
             {
-                grupo = encontrado;
+                aporte = encontrado;
                 Cargar();
             }
             else
             {
                 Limpiar();
-                MessageBox.Show("Grupo no existe en la base de datos", "Fallo", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Aporte no existe en la base de datos", "Fallo",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void AgregarFilaButton_Click(object sender, RoutedEventArgs e)
         {
-            grupo.Detalle.Add(new GruposDetalle
+            aporte.AporteDetalle.Add(new AporteDetalle
             {
-                GrupoId = grupo.GrupoId,
+                TipoAporteId = (int)TipoAporteComboBox.SelectedValue,
+                Monto = Convert.ToSingle(ValorTextBox.Text),
                 Persona = (Personas)PersonaComboBox.SelectedItem,
-                Orden = OrdenTextBox.Text
+                TipoAporte = (TipoAporte)TipoAporteComboBox.SelectedItem
             });
 
+            aporte.Monto += Convert.ToSingle(ValorTextBox.Text);
             Cargar();
-
-            OrdenTextBox.Focus();
-            OrdenTextBox.Clear();
         }
 
         private void RemoverFilaButton_Click(object sender, RoutedEventArgs e)
         {
             if (DetalleDataGrid.Items.Count >= 1 && DetalleDataGrid.SelectedIndex <= DetalleDataGrid.Items.Count - 1)
             {
-                grupo.Detalle.RemoveAt(DetalleDataGrid.SelectedIndex);
+                aporte.AporteDetalle.RemoveAt(DetalleDataGrid.SelectedIndex);
+                aporte.Monto -= float.Parse(MontoTextBox.Text);
                 Cargar();
             }
         }
 
-        private bool ExisteEnLaBaseDeDatos()
-        {
-            Grupos esValido = GruposBLL.Buscar(grupo.GrupoId);
-
-            return (esValido != null);
-        }
         private void NuevoButton_Click(object sender, RoutedEventArgs e)
         {
             Limpiar();
@@ -96,15 +108,15 @@ namespace GestionPersonas.UI.Registros
         {
             bool paso = false;
 
-            if (grupo.GrupoId == 0)
+            if (aporte.AporteId == 0)
             {
-                paso = GruposBLL.Guardar(grupo);
+                paso = AporteBLL.Guardar(aporte);
             }
             else
             {
                 if (ExisteEnLaBaseDeDatos())
                 {
-                    paso = GruposBLL.Guardar(grupo);
+                    paso = AporteBLL.Guardar(aporte);
                 }
                 else
                 {
@@ -115,25 +127,30 @@ namespace GestionPersonas.UI.Registros
             if (paso)
             {
                 Limpiar();
-                MessageBox.Show("Guardado!", "Exito", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Guardado!", "Exito",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
-                MessageBox.Show("Fallo al guardar", "Fallo", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Fallo al guardar", "Fallo",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+
         }
 
         private void EliminarButton_Click(object sender, RoutedEventArgs e)
         {
-            Grupos existe = GruposBLL.Buscar(grupo.GrupoId);
+            Aportes existe = AporteBLL.Buscar(aporte.AporteId);
 
             if (existe == null)
             {
-                MessageBox.Show("No existe el grupo en la base de datos", "Fallo", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("No existe el grupo en la base de datos", "Fallo",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             else
             {
-                GruposBLL.Eliminar(grupo.GrupoId);
-                MessageBox.Show("Eliminado", "Exito", MessageBoxButton.OK, MessageBoxImage.Information);
+                AporteBLL.Eliminar(aporte.AporteId);
+                MessageBox.Show("Eliminado", "Exito",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
                 Limpiar();
             }
         }
